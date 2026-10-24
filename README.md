@@ -1,5 +1,7 @@
 # LoopLab · Pod Transit Simulator
 
+[![Model checks](https://github.com/alisammarraie/looplab/actions/workflows/checks.yml/badge.svg)](https://github.com/alisammarraie/looplab/actions/workflows/checks.yml)
+
 **Turn a track map into an interactive demonstration of small automated transit operations.**
 
 [Open the simulator](https://alisammarraie.github.io/looplab/src/) · [Download the single-file edition](LoopLab.html) · [Fictional sample map](src/demo.geojson)
@@ -69,6 +71,6 @@ flowchart LR
   Sim --> Results[Metrics / comparisons / CSV]
 ```
 
-The model is separated from rendering: `engine.mjs` handles passengers and dispatch; `motion.mjs` handles paths and footprints; `operations.mjs` handles platforms and crossings; `map.mjs` and `detail.mjs` share model positions. Tests exercise conservation, FIFO order, movement continuity, boarding interlocks, crossing conflicts, reproducibility and invalid topology on synthetic fixtures.
+The model is separated from rendering: `engine.mjs` handles passengers and dispatch; `motion.mjs` handles paths and footprints; `operations.mjs` handles platforms and crossings; `map.mjs` and `detail.mjs` share model positions. See the [validation record](docs/validation.md) for four-hour fictional runs. Tests exercise conservation, FIFO order, movement continuity, boarding interlocks, crossing conflicts, reproducibility and invalid topology on synthetic fixtures.
 
 Created by [alisammarraie](https://github.com/alisammarraie) with AI-assisted implementation and testing. Published as an educational portfolio prototype. Licensed under MIT.
