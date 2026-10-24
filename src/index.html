@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#172d2a" />
+    <title>LoopLab · Pod Transit Lab</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="./" aria-label="LoopLab simulation home"
+        ><span class="brand-icon">L<span>↗</span></span
+        ><span>looplab<small>SIMULATION LAB</small></span></a
+      >
+      <div class="project">
+        <span class="green-dot"></span
+        ><span id="projectName">Fictional demonstration network</span
+        ><span class="chip">Fictional demo</span>
+      </div>
+      <div class="header-actions">
+        <button id="guideBtn" class="text-btn">How it works</button
+        ><button id="saveBtn" class="text-btn">Save scenario ↓</button
+        ><button id="uploadBtn" class="dark-btn">＋ Import map</button>
+      </div>
+    </header>
+    <main>
+      <aside class="control-panel">
+        <div class="panel-title">
+          <span class="eyebrow">YOUR SCENARIO</span
+          ><button id="basisBtn" class="tiny-link">Model assumptions ↗</button>
+        </div>
+        <h1>A city in motion.</h1>
+        <p class="muted intro">Explore how your network moves people.</p>
+        <div class="scenario-tabs" role="group" aria-label="Scenario presets">
+          <button data-preset="base" class="active">Base case</button
+          ><button data-preset="peak">Peak demand</button
+          ><button data-preset="custom">Custom</button>
+        </div>
+        <div class="config-section">
+          <h2><span>01</span> Network</h2>
+          <div class="network-card">
+            <span class="file-icon">⌁</span>
+            <div>
+              <strong id="networkName">Demo Loop</strong
+              ><small id="networkMeta">Reading track…</small>
+            </div>
+            <button
+              id="networkBtn"
+              title="Edit network and stops"
+              aria-label="Edit network and stops"
+            >
+              ↗
+            </button>
+          </div>
+          <div class="network-summary">
+            <div><strong id="lengthInfo">—</strong><small>route km</small></div>
+            <div><strong id="stopsInfo">8</strong><small>stops</small></div>
+            <div><strong>⇄</strong><small>two-way tracks</small></div>
+          </div>
+        </div>
+        <div class="config-section">
+          <h2><span>02</span> Fleet & operation</h2>
+          <label class="field"
+            ><span>Fleet size <em>pods</em></span
+            ><input
+              id="fleet"
+              type="number"
+              min="1"
+              max="300"
+              value="50" /></label
+          ><label class="field"
+            ><span>Pod capacity <em>passengers</em></span
+            ><input
+              id="capacity"
+              type="number"
+              min="1"
+              max="30"
+              value="8" /></label
+          ><label class="field"
+            ><span>Cruise cap (assumption) <em>km/h</em></span
+            ><input
+              id="speed"
+              type="number"
+              min="5"
+              max="50"
+              value="32" /></label
+          ><label class="field"
+            ><span>Boarding + alighting <em>seconds</em></span
+            ><input
+              id="dwell"
+              type="number"
+              min="2"
+              max="300"
+              value="30" /></label
+          ><button id="advancedBtn" class="expand-btn">
+            More operating parameters <span>＋</span>
+          </button>
+          <div id="advancedFields" hidden>
+            <label class="field"
+              ><span>Pool collection window <em>s</em></span
+              ><input
+                id="hold"
+                type="number"
+                min="0"
+                max="300"
+                value="20" /></label
+            ><label class="field"
+              ><span>Edge entry headway <em>s</em></span
+              ><input
+                id="headway"
+                type="number"
+                min="1"
+                max="60"
+                value="3" /></label
+            ><label class="field"
+              ><span>Acceleration / braking <em>m/s²</em></span
+              ><input
+                id="acceleration"
+                type="number"
+                min="0.1"
+                max="2"
+                step="0.1"
+                value="0.8" /></label
+            ><label class="field"
+              ><span>Crossing allowance <em>s/km</em></span
+              ><input
+                id="crossing"
+                type="number"
+                min="0"
+                max="300"
+                value="0" /></label
+            ><label class="field"
+              ><span>Berths <em>per platform</em></span
+              ><input
+                id="berths"
+                type="number"
+                min="1"
+                max="20"
+                value="4" /></label
+            ><label class="field"
+              ><span>Random seed</span
+              ><input
+                id="seed"
+                type="number"
+                min="1"
+                max="999999"
+                value="42" /></label
+            ><label class="check-field"
+              ><input id="reposition" type="checkbox" checked /> Rebalance empty
+              pods</label
+            >
+            <p class="help">
+              Boarding + alighting is split equally between boarding and
+              alighting. Pool collection can extend boarding. Headway controls
+              entry to each directed track segment.
+            </p>
+          </div>
+        </div>
+        <div class="config-section">
+          <h2><span>03</span> Passenger demand</h2>
+          <label class="field"
+            ><span>Network arrivals <em>pax/hour</em></span
+            ><input
+              id="demand"
+              type="number"
+              min="0"
+              max="20000"
+              step="100"
+              value="1500" /></label
+          ><label class="field"
+            ><span>Group size <em>pax/request</em></span
+            ><input
+              id="groupSize"
+              type="number"
+              min="1"
+              max="30"
+              value="1" /></label
+          ><label class="select-field"
+            >Service model<select id="mode">
+              <option value="shared">Shared · same destination</option>
+              <option value="private">Private · one group per pod</option>
+            </select></label
+          ><button id="demandBtn" class="expand-btn">
+            Edit station demand & destinations <span>↗</span>
+          </button>
+          <div class="assumption-note">
+            <span>i</span>
+            <p>
+              Example demand. Replace with your forecast to test a project
+              scenario.
+            </p>
+          </div>
+        </div>
+        <div class="apply-wrap">
+          <button id="applyBtn" class="primary-btn">
+            Apply & start new run <span>↗</span></button
+          ><small id="pendingLabel">Changes start a fresh simulation.</small>
+        </div>
+      </aside>
+      <section class="workspace">
+        <div class="workspace-heading">
+          <div>
+            <span class="eyebrow">NETWORK EXPLORER</span>
+            <h2 id="mapTitle">Fictional demonstration network</h2>
+          </div>
+          <button id="presentBtn" class="outline-btn">⛶ Present</button>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <span>Passengers delivered</span><strong id="servedMetric">0</strong
+            ><small id="throughputMetric">0 pax/h · since start</small>
+          </div>
+          <div class="metric">
+            <span>Average wait</span><strong id="waitMetric">—</strong
+            ><small id="p95Metric">95th percentile · —</small>
+          </div>
+          <div class="metric">
+            <span>Passengers waiting</span><strong id="queueMetric">0</strong
+            ><small id="generatedMetric">0 passengers generated</small>
+          </div>
+          <div class="metric">
+            <span>Average pod load</span><strong id="loadMetric">—</strong
+            ><small id="movingMetric">0 pods moving</small>
+          </div>
+        </div>
+        <div class="operations-toolbar">
+          <label
+            >Inspect
+            <select id="focusTarget" aria-label="Inspect station or crossing">
+              <option value="overview">Network overview</option>
+            </select></label
+          ><button id="focusBtn" class="outline-btn">Zoom to detail ↗</button
+          ><button id="operationsBtn" class="outline-btn">
+            Stations & signals ⚙</button
+          ><span id="operationsBadge">Illustrative layouts</span>
+        </div>
+        <div class="map-wrap" id="mapWrap">
+          <canvas
+            id="map"
+            aria-label="Interactive route map showing stations, moving passenger pods and empty pods"
+          ></canvas>
+          <div class="map-top">
+            <div class="map-badge">
+              <span class="green-dot"></span>
+              <span id="runState">Ready to simulate</span>
+            </div>
+            <div class="map-layer">
+              <button id="tilesBtn" class="active" aria-pressed="true">
+                Clean map</button
+              ><button id="satelliteBtn" aria-pressed="false">Satellite</button
+              ><button id="schematicBtn" aria-pressed="false">Network</button>
+            </div>
+          </div>
+          <label class="basemap-opacity" id="basemapOpacity"
+            >Background
+            <input
+              id="backgroundOpacity"
+              type="range"
+              min="20"
+              max="100"
+              step="1"
+              value="68"
+              aria-label="Basemap opacity"
+            /><output id="opacityValue">68%</output></label
+          >
+          <div class="map-tools">
+            <button id="zoomIn" aria-label="Zoom in">＋</button
+            ><button id="zoomOut" aria-label="Zoom out">−</button
+            ><button id="fitBtn" title="Fit network" aria-label="Fit network">
+              ⌖
+            </button>
+          </div>
+          <div class="map-legend">
+            <span><i class="legend-track"></i> Track</span
+            ><span><i class="legend-loaded"></i> Passenger pod</span
+            ><span><i class="legend-empty"></i> Empty pod</span
+            ><span><i class="legend-stop"></i> Stop</span>
+          </div>
+          <div id="detailLevel" class="detail-level">
+            Network view · zoom in for operating detail
+          </div>
+          <div class="north">N<br />↑</div>
+          <div class="map-scale" id="mapScale">200 m</div>
+          <div id="tileAttribution">
+            ©
+            <a
+              href="https://www.openstreetmap.org/copyright"
+              target="_blank"
+              rel="noopener"
+              >OpenStreetMap</a
+            >
+            contributors
+          </div>
+          <div id="mapTooltip" hidden></div>
+          <div id="stationPopup" class="station-popup" hidden></div>
+        </div>
+        <div class="playback">
+          <div class="play-buttons">
+            <button id="playBtn" class="play-btn" aria-label="Start simulation">
+              ▶</button
+            ><button
+              id="resetBtn"
+              class="icon-btn"
+              title="Reset run"
+              aria-label="Reset run"
+            >
+              ↺
+            </button>
+            <div class="clock">
+              <strong id="clock">00:00:00</strong><small>SIMULATED TIME</small>
+            </div>
+          </div>
+          <div class="speed-control">
+            <label for="playSpeed">Playback</label
+            ><select id="playSpeed">
+              <option value="1">1×</option>
+              <option value="5">5×</option>
+              <option value="20" selected>20×</option>
+              <option value="60">60×</option>
+              <option value="300">300×</option></select
+            ><button id="advanceBtn" class="outline-btn">
+              Advance 15 min ↗
+            </button>
+          </div>
+          <div class="playback-actions">
+            <button id="snapshotBtn" class="text-btn">Save comparison ＋</button
+            ><button id="resultsMain" class="text-btn">
+              Results & export ↗
+            </button>
+          </div>
+        </div>
+        <section id="detailPanel" class="detail-panel" hidden>
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">LIVE OPERATING DETAIL</span>
+              <h3 id="inspectorTitle">Station detail</h3>
+            </div>
+            <div>
+              <button id="detailFocusBtn" class="tiny-link">
+                Focus on map ↗</button
+              ><button
+                id="closeDetailBtn"
+                class="icon-btn"
+                aria-label="Close operating detail"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+          <div class="inspector-grid">
+            <canvas
+              id="detailCanvas"
+              aria-label="Live schematic of the selected station or road crossing"
+            ></canvas>
+            <div class="inspector-copy">
+              <div id="inspectorStatus"></div>
+              <p id="inspectorExplanation"></p>
+              <div class="inspector-actions">
+                <button id="slowDetail" class="outline-btn">
+                  Play detail 1×</button
+                ><button id="testInterlock" class="outline-btn">
+                  Test obstruction</button
+                ><button id="requestCrossing" class="outline-btn" hidden>
+                  Request pod phase</button
+                ><button id="editInspected" class="tiny-link">
+                  Edit assumptions ↗
+                </button>
+              </div>
+            </div>
+          </div>
+          <p class="detail-footnote">
+            Live model states · fictional geometry · editable operating
+            assumptions.
+          </p>
+        </section>
+        <div class="lower-grid">
+          <section class="station-section">
+            <div class="section-heading">
+              <h3>At the stations</h3>
+              <span id="stationSummary">8 stops · live queues</span>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>STATION</th>
+                    <th>WAITING</th>
+                    <th>PODS HERE</th>
+                    <th>ARRIVING</th>
+                    <th>DELIVERED</th>
+                  </tr>
+                </thead>
+                <tbody id="stationRows"></tbody>
+              </table>
+            </div>
+          </section>
+          <section class="activity-section">
+            <div class="section-heading">
+              <h3>Network activity</h3>
+              <button id="resultsBtn" class="tiny-link">
+                Results & export ↗
+              </button>
+            </div>
+            <div class="utilization">
+              <div>
+                <span id="utilizationLabel">Fleet activity</span
+                ><strong id="utilizationMetric">0%</strong>
+              </div>
+              <div class="util-bar"><i id="utilBar"></i></div>
+              <small id="tripSummary">0 passenger trips · 0 empty trips</small>
+            </div>
+            <div id="activityLog" class="activity-log">
+              <p class="empty-message">Start a run to follow pod journeys.</p>
+            </div>
+          </section>
+        </div>
+        <footer>
+          <span
+            ><i class="green-dot"></i> Interactive planning demonstrator</span
+          ><button id="limitationsBtn">Model scope & limitations ↗</button>
+        </footer>
+      </section>
+    </main>
+    <dialog id="modal">
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow" id="modalEyebrow">SIMULATION LAB</span>
+          <h2 id="modalTitle"></h2>
+        </div>
+        <button id="closeModal" class="icon-btn" aria-label="Close dialog">
+          ×
+        </button>
+      </div>
+      <div id="modalBody"></div>
+    </dialog>
+    <input
+      id="mapInput"
+      type="file"
+      accept=".kmz,.kml,.geojson,.json"
+      hidden
+    /><input id="scenarioInput" type="file" accept=".json" hidden />
+    <div id="toast" role="status" hidden></div>
+    <script type="module" src="app.mjs"></script>
+  </body>
+</html>
